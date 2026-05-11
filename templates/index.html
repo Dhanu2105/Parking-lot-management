@@ -8,7 +8,7 @@
 
 <div class="container text-center mt-5">
 
-    <!-- 🔔 Flash Messages (Improved) -->
+    <!-- Flash Messages (Improved) -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, msg in messages %}
@@ -20,7 +20,7 @@
   {% endif %}
 {% endwith %}
 
-    <h1 class="mb-4">🚗 Parking Lot Management</h1>
+    <h1 class="mb-4"> Parking Lot Management</h1>
 
     <a href="/entry" class="btn btn-success m-2">Vehicle Entry</a>
     <a href="/exit" class="btn btn-danger m-2">Vehicle Exit</a>
