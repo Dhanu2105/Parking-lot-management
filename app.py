@@ -41,11 +41,11 @@ def login():
 
 @app.route('/entry', methods=['GET', 'POST'])
 def entry():
-    # 🔒 Check login
+    #Check login
     if 'employee_id' not in session:
         return redirect('/login')
 
-    # 📄 Show form
+    # Show form
     if request.method == 'GET':
         return render_template('entry.html')
 
@@ -55,7 +55,7 @@ def entry():
 
     cursor = db.cursor()
 
-    # 🔍 Check if vehicle already exists
+    # Check if vehicle already exists
     cursor.execute(
         "SELECT vehicle_id FROM vehicle WHERE vehicle_number=%s",
         (vehicle_number,)
@@ -65,14 +65,14 @@ def entry():
     if existing:
         vehicle_id = existing[0]
     else:
-        # ➕ Insert new vehicle
+        #Insert new vehicle
         cursor.execute(
             "INSERT INTO vehicle (vehicle_number, vehicle_type) VALUES (%s, %s)",
             (vehicle_number, vehicle_type)
         )
         vehicle_id = cursor.lastrowid
 
-    # 🚫 Check if already parked
+    #Check if already parked
     cursor.execute("""
         SELECT * FROM parking_record 
         WHERE vehicle_id = %s AND exit_time IS NULL
@@ -81,9 +81,9 @@ def entry():
     already_parked = cursor.fetchone()
 
     if already_parked:
-        return "⚠️ Vehicle already parked!"
+        return "Vehicle already parked!"
 
-    # 🔍 Find free slot
+    # Find free slot
     cursor.execute(
     "SELECT slot_id FROM parking_slot WHERE status='Free' AND slot_type=%s LIMIT 1",
     (vehicle_type,)
@@ -91,17 +91,17 @@ def entry():
     slot = cursor.fetchone()
 
     if not slot:
-        return "❌ No parking slots available!"
+        return "No parking slots available!"
 
     slot_id = slot[0]
 
-    # 🔄 Update slot status
+    # Update slot status
     cursor.execute(
         "UPDATE parking_slot SET status='Occupied' WHERE slot_id=%s",
         (slot_id,)
     )
 
-    # 📝 Insert parking record
+    # Insert parking record
     cursor.execute("""
         INSERT INTO parking_record (vehicle_id, slot_id, employee_id, entry_time)
         VALUES (%s, %s, %s, %s)
@@ -109,7 +109,7 @@ def entry():
 
     db.commit()
 
-    # 🔁 Redirect to home
+    # Redirect to home
     return redirect('/')
 
 @app.route('/exit', methods=['GET', 'POST'])
@@ -141,7 +141,7 @@ def exit():
         return redirect('/')
         
 
-    # ✅ NOW INSIDE FUNCTION
+    # NOW INSIDE FUNCTION
     entry_time = r['entry_time']
     hours = int((datetime.now() - entry_time).total_seconds() / 3600) + 1
 
