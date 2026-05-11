@@ -9,7 +9,7 @@ app.secret_key = "secret123"
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Dhanush@21",
+    password="your password",
     database="parking_system",
     port=3306   # match your MySQL port
 )
